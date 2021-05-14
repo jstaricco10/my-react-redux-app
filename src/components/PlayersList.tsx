@@ -31,6 +31,7 @@ const PlayersList: React.FC = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
+      PLAYERS LIST
       <List>
         <Divider />
         {players.map((player: Player) => {

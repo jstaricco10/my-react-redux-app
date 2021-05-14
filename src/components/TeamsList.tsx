@@ -30,6 +30,7 @@ const TeamList: React.FC = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
+      TEAMS LIST
       <List>
         <Divider />
         {teams.map((team: Team) => {
