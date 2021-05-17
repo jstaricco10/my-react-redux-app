@@ -4,16 +4,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import * as playerActions from '../redux/actions/playerActions';
-import { useSelector, useDispatch } from 'react-redux';
-
-interface Player {
-  id: number;
-  name: string;
-  lastname: string;
-  age: number;
-  dateofbirth: string;
-}
+import { useSelector } from 'react-redux';
+import { format } from 'date-fns';
+import { Player } from '../helpers/interfaces';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PlayersList: React.FC = () => {
-  const dispatch = useDispatch();
   const players: Player[] = useSelector(
     (state: { players: Player[] }) => state.players
   );
@@ -37,10 +29,10 @@ const PlayersList: React.FC = () => {
         {players.map((player: Player) => {
           return (
             <>
-              <ListItem button>
+              <ListItem button key={player.id}>
                 <ListItemText>
                   {player.name} {player.lastname} | {player.age} |{' '}
-                  {player.dateofbirth} |
+                  {format(player.dateofbirth, 'MM/dd/yyyy')} |
                 </ListItemText>
               </ListItem>
               <Divider />

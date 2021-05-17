@@ -1,20 +1,17 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import * as teamActions from '../redux/actions/teamActions';
+import {
+  ListItem,
+  ListItemText,
+  Divider,
+  List,
+  MenuItem,
+  Select,
+} from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-
-interface Team {
-  id: number;
-  name: string;
-  stadium: string;
-  players: [];
-  dateofbirth: string;
-  numberOfPlayers: number;
-}
+import { format } from 'date-fns';
+import { Team, Player } from '../helpers/interfaces';
+import * as teamActions from '../redux/actions/teamActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +24,27 @@ const useStyles = makeStyles((theme) => ({
 const TeamList: React.FC = () => {
   const dispatch = useDispatch();
   const teams: Team[] = useSelector((state: { teams: Team[] }) => state.teams);
+  const players: Player[] = useSelector(
+    (state: { players: Player[] }) => state.players
+  );
   const classes = useStyles();
+
+  const handleSelectorChange = (event: any) => {
+    const playerToAddId = event.target.value;
+    const teamIdToAdd = event.target.name;
+    const filteredTeams = teams.filter((t) => t.id === teamIdToAdd);
+    const filteredPlayers = players.filter((p) => p.id === playerToAddId);
+    if (filteredTeams.length > 0 && filteredPlayers.length > 0) {
+      const newTeamPlayers = [...filteredTeams[0].players, filteredPlayers[0]];
+      const newTeam = {
+        ...filteredTeams[0],
+        players: newTeamPlayers,
+        numberOfPlayers: filteredTeams[0].numberOfPlayers + 1,
+      };
+      dispatch(teamActions.addPlayerToTeam(newTeam, filteredPlayers[0]));
+    }
+  };
+
   return (
     <div className={classes.root}>
       TEAMS LIST
@@ -39,8 +56,28 @@ const TeamList: React.FC = () => {
               <ListItem button>
                 <ListItemText>
                   {team.name} | {team.stadium} | Number of Players:{' '}
-                  {team.numberOfPlayers} | {team.dateofbirth} |
+                  {team.numberOfPlayers} |{' '}
+                  {format(team.dateofbirth, 'MM/dd/yyyy')} |
                 </ListItemText>
+                <Select
+                  name={team.id}
+                  value={players}
+                  onChange={handleSelectorChange}
+                >
+                  {players.map((player: Player) => {
+                    const ps = team.players.filter(
+                      (p: Player) => p.id === player.id
+                    ).length;
+                    if (ps > 0) {
+                      return;
+                    }
+                    return (
+                      <MenuItem value={player.id}>
+                        {player.name} {player.lastname}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
               </ListItem>
               <Divider />
             </>
