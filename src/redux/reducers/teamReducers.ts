@@ -10,13 +10,19 @@ export default function teamReducer(
     case types.CREATE_TEAM_SUCCESS:
       return { ...state, teams: [...state.teams, action.team] };
     case types.ADD_PLAYER_TO_TEAM:
-      return state.teams.map((team) =>
-        team.id === action.team.id ? action.team : team
-      );
+      return {
+        ...state,
+        teams: state.teams.map((team) =>
+          team.id === action.team.id ? action.team : team
+        ),
+      };
     case types.DELETE_PLAYER_FROM_TEAM:
-      return state.teams.map((team) =>
-        team.id === action.team.id ? action.team : team
-      );
+      return {
+        ...state,
+        teams: state.teams.map((team) =>
+          team.id === action.team.id ? action.team : team
+        ),
+      };
     default:
       return state;
   }
