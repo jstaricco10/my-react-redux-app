@@ -8,3 +8,7 @@ export function createTeamSuccess(team: Team) {
 export function addPlayerToTeam(team: Team, player: Player) {
   return { type: types.ADD_PLAYER_TO_TEAM, player, team };
 }
+
+export function deletePlayerFromTeam(team: Team, player: Player) {
+  return { type: types.DELETE_PLAYER_FROM_TEAM, player, team };
+}

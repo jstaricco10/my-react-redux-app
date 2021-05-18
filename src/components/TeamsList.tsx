@@ -32,16 +32,37 @@ export default function TeamsList() {
   const handleSelectorChange = (event: any) => {
     const playerToAddId = event.target.value;
     const teamIdToAdd = event.target.name;
+
     const filteredTeams = teams.filter((t) => t.id === teamIdToAdd);
     const filteredPlayers = players.filter((p) => p.id === playerToAddId);
+
     if (filteredTeams.length > 0 && filteredPlayers.length > 0) {
-      const newTeamPlayers = [...filteredTeams[0].players, filteredPlayers[0]];
-      const newTeam = {
-        ...filteredTeams[0],
-        players: newTeamPlayers,
-        numberOfPlayers: filteredTeams[0].numberOfPlayers + 1,
+      const team = filteredTeams[0];
+      const player = filteredPlayers[0];
+      const newTeamPlayersExtra = [...team.players, player];
+      const newTeamPlayersDeleted = team.players.filter(
+        (p) => p.id !== player.id
+      );
+      const newTeamWithExtraPlayer = {
+        ...team,
+        players: newTeamPlayersExtra,
+        numberOfPlayers: team.numberOfPlayers + 1,
       };
-      dispatch(teamActions.addPlayerToTeam(newTeam, filteredPlayers[0]));
+      const newTeamWithPlayerDeleted = {
+        ...team,
+        players: newTeamPlayersDeleted,
+        numberOfPlayers: team.numberOfPlayers - 1,
+      };
+      // tenemos que checkear ahora si el player esta en el team de antes
+      const addPlayerToTeam =
+        team.players.filter((p: Player) => p.id === player.id).length > 0
+          ? false
+          : true;
+      addPlayerToTeam
+        ? dispatch(teamActions.addPlayerToTeam(newTeamWithExtraPlayer, player))
+        : dispatch(
+            teamActions.deletePlayerFromTeam(newTeamWithPlayerDeleted, player)
+          );
     }
   };
 
@@ -65,16 +86,23 @@ export default function TeamsList() {
                   onChange={handleSelectorChange}
                 >
                   {players.map((player: Player) => {
-                    const ps = team.players.filter(
+                    return team.players.filter(
                       (p: Player) => p.id === player.id
-                    ).length;
-                    if (ps < 1) {
-                      return (
-                        <MenuItem value={player.id}>
-                          {player.name} {player.lastname}
-                        </MenuItem>
-                      );
-                    }
+                    ).length > 0 ? (
+                      <MenuItem
+                        value={player.id}
+                        style={{ backgroundColor: '#b3fcbc' }}
+                      >
+                        {player.name} {player.lastname}
+                      </MenuItem>
+                    ) : (
+                      <MenuItem
+                        value={player.id}
+                        style={{ backgroundColor: '#ffabc2' }}
+                      >
+                        {player.name} {player.lastname}
+                      </MenuItem>
+                    );
                   })}
                 </Select>
               </ListItem>

@@ -13,6 +13,10 @@ export default function teamReducer(
       return state.map((team) =>
         team.id === action.team.id ? action.team : team
       );
+    case types.DELETE_PLAYER_FROM_TEAM:
+      return state.map((team) =>
+        team.id === action.team.id ? action.team : team
+      );
     default:
       return state;
   }
