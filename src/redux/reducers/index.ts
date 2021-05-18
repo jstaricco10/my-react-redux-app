@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 import players from './playerReducers';
 import teams from './teamReducers';
-const rootReducer = combineReducers({
+import { Player, Team } from '../../helpers/interfaces';
+const rootReducer = combineReducers<{ players: Player[]; teams: Team[] }>({
   players,
   teams,
 });
