@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PlayersList: React.FC = () => {
+export default function PlayersList() {
   const players: Player[] = useSelector(
     (state: { players: Player[] }) => state.players
   );
@@ -42,6 +42,4 @@ const PlayersList: React.FC = () => {
       </List>
     </div>
   );
-};
-
-export default PlayersList;
+}

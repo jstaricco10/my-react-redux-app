@@ -13,10 +13,11 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useDispatch } from 'react-redux';
 import { calculateAge } from '../helpers/fns';
+import { Player } from '../helpers/interfaces';
 
 export default function PlayerForm() {
   const dispatch = useDispatch();
-  const [player, setPlayer] = useState({
+  const [player, setPlayer] = useState<Player>({
     id: '',
     name: '',
     lastname: '',
@@ -24,10 +25,19 @@ export default function PlayerForm() {
     dateofbirth: new Date(1999, 6, 16),
   });
 
-  const handleChange = (event: any) =>
+  const resetPlayer = (player: Player) => {
+    setPlayer({
+      id: '',
+      name: '',
+      lastname: '',
+      age: 21,
+      dateofbirth: new Date(1999, 6, 16),
+    });
+  };
+
+  const handleChange = (event: { target: { name: string; value: string } }) =>
     setPlayer({ ...player, [event.target.name]: event.target.value });
   function handleDateChange(date: Date) {
-    console.log(date);
     const newAge = calculateAge(date);
     if (newAge < 18) {
       alert('Invalid Date, player age must be > than 18');
@@ -42,14 +52,16 @@ export default function PlayerForm() {
     if (!newPlayer.name) return alert('Player name is required');
     if (!newPlayer.lastname) return alert('Player lastname is required');
     dispatch(playerActions.createPlayerSuccess(newPlayer));
+    resetPlayer(player);
   };
 
   return (
     <>
-      <FormGroup>
+      <FormGroup id="team-form">
         <FormControl>
           <InputLabel>Name</InputLabel>
           <Input
+            value={player.name}
             name="name"
             aria-describedby="my-helper-text"
             onChange={handleChange}
@@ -58,6 +70,7 @@ export default function PlayerForm() {
         <FormControl>
           <InputLabel>Last Name</InputLabel>
           <Input
+            value={player.lastname}
             name="lastname"
             aria-describedby="my-helper-text"
             onChange={handleChange}

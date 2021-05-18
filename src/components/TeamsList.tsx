@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TeamList: React.FC = () => {
+export default function TeamsList() {
   const dispatch = useDispatch();
   const teams: Team[] = useSelector((state: { teams: Team[] }) => state.teams);
   const players: Player[] = useSelector(
@@ -68,14 +68,13 @@ const TeamList: React.FC = () => {
                     const ps = team.players.filter(
                       (p: Player) => p.id === player.id
                     ).length;
-                    if (ps > 0) {
-                      return;
+                    if (ps < 1) {
+                      return (
+                        <MenuItem value={player.id}>
+                          {player.name} {player.lastname}
+                        </MenuItem>
+                      );
                     }
-                    return (
-                      <MenuItem value={player.id}>
-                        {player.name} {player.lastname}
-                      </MenuItem>
-                    );
                   })}
                 </Select>
               </ListItem>
@@ -86,6 +85,4 @@ const TeamList: React.FC = () => {
       </List>
     </div>
   );
-};
-
-export default TeamList;
+}

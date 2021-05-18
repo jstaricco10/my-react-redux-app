@@ -4,7 +4,7 @@ import PlayerForm from './PlayerForm';
 import { Button, InputLabel } from '@material-ui/core';
 
 export default function PlayersPage() {
-  const [activeForm, setActiveForm] = useState(false);
+  const [activeForm, setActiveForm] = useState<boolean>(false);
   return (
     <>
       <Button

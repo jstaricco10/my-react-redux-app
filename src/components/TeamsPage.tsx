@@ -4,7 +4,7 @@ import TeamForm from './TeamForm';
 import { Button, InputLabel } from '@material-ui/core';
 
 export default function TeamsPage() {
-  const [activeForm, setActiveForm] = useState(false);
+  const [activeForm, setActiveForm] = useState<boolean>(false);
   return (
     <>
       <Button

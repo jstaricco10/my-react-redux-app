@@ -15,7 +15,7 @@ import { Team } from '../helpers/interfaces';
 
 export default function TeamForm() {
   const dispatch = useDispatch();
-  const [team, setTeam] = useState({
+  const [team, setTeam] = useState<Team>({
     id: '',
     name: '',
     stadium: '',
@@ -26,24 +26,30 @@ export default function TeamForm() {
 
   const teams: Team[] = useSelector((state: { teams: Team[] }) => state.teams);
 
-  const handleChange = (event: any) => {
-    console.log(event.target.name);
-    console.log(event.target.value);
+  const resetTeam = (team: Team) => {
+    setTeam({
+      id: '',
+      name: '',
+      stadium: '',
+      players: [],
+      dateofbirth: new Date(1891, 6, 16),
+      numberOfPlayers: 0,
+    });
+  };
+
+  const handleChange = (event: { target: { name: string; value: string } }) => {
     setTeam({ ...team, [event.target.name]: event.target.value });
-    console.log(team);
   };
 
   function handleDateChange(date: Date) {
-    console.log(date);
     setTeam({ ...team, dateofbirth: date });
-    console.log(team);
   }
 
   const addTeam = () => {
     const newId = nextId('test-id-');
     let validTeam = true;
     const newTeam = { ...team, id: newId };
-    teams.map((team) => {
+    teams.forEach((team) => {
       if (team.stadium === newTeam.stadium) validTeam = false;
     });
     if (!validTeam) {
@@ -53,6 +59,7 @@ export default function TeamForm() {
     if (!newTeam.name) return alert('Team name is required');
     if (!newTeam.stadium) return alert('Team stadium is required');
     dispatch(teamActions.createTeamSuccess(newTeam));
+    resetTeam(team);
   };
 
   return (
@@ -61,6 +68,7 @@ export default function TeamForm() {
         <FormControl>
           <InputLabel>Name</InputLabel>
           <Input
+            value={team.name}
             name="name"
             aria-describedby="my-helper-text"
             onChange={handleChange}
@@ -69,6 +77,7 @@ export default function TeamForm() {
         <FormControl>
           <InputLabel>Stadium</InputLabel>
           <Input
+            value={team.stadium}
             name="stadium"
             aria-describedby="my-helper-text"
             onChange={handleChange}
