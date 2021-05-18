@@ -24,7 +24,9 @@ export default function TeamForm() {
     numberOfPlayers: 0,
   });
 
-  const teams: Team[] = useSelector((state: { teams: Team[] }) => state.teams);
+  const teams: Team[] = useSelector(
+    (state: { teamsData: { teams: Team[] } }) => state.teamsData.teams
+  );
 
   const resetTeam = (team: Team) => {
     setTeam({

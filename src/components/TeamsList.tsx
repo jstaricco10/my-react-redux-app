@@ -23,9 +23,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TeamsList() {
   const dispatch = useDispatch();
-  const teams: Team[] = useSelector((state: { teams: Team[] }) => state.teams);
+  const teams: Team[] = useSelector(
+    (state: { teamsData: { teams: Team[] } }) => state.teamsData.teams
+  );
   const players: Player[] = useSelector(
-    (state: { players: Player[] }) => state.players
+    (state: { playersData: { players: Player[] } }) => state.playersData.players
   );
   const classes = useStyles();
 
